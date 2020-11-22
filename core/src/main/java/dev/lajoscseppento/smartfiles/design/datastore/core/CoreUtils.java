@@ -5,8 +5,7 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class CoreUtils {
 
-    public String getMessage() {
-        return "Hello, World!";
-    }
-
+  public String getMessage() {
+    return "Hello, World!";
+  }
 }

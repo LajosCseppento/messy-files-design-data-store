@@ -3,6 +3,7 @@ plugins {
     jacoco
     id("org.springframework.boot")
     id("io.spring.dependency-management")
+    id("com.diffplug.spotless")
 }
 
 val lombokVersion = "1.18.16"
@@ -46,4 +47,11 @@ dependencies {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+spotless {
+    java {
+        removeUnusedImports()
+        googleJavaFormat()
+    }
 }
