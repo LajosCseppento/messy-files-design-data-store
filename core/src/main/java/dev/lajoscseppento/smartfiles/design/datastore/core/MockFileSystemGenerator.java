@@ -7,31 +7,24 @@ import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Random;
+import javax.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /** Mock file system generator. Rudimentary, uses jimfs, Unix-style. */
+@Component
 @Slf4j
 public class MockFileSystemGenerator {
 
+  @Autowired
+  private MockFileSystemGeneratorProperties properties;
+
   // These parameters generate max 2M elements under 10 seconds
-  private static final int MIN_SUBDIRECTORIES = 4;
-  private static final int MAX_SUBDIRECTORIES = 10;
-  private static final int MIN_FILES = 0;
-  private static final int MAX_FILES = 8;
-  private static final int DEFAULT_MAX_DEPTH = 6;
-
-  private final Random random;
-
-  public MockFileSystemGenerator() {
-    this.random = new Random();
-  }
-
-  public MockFileSystemGenerator(long seed) {
-    this.random = new Random(seed);
-  }
+  private Random random;
 
   public FileSystem generate() {
-    return generate(DEFAULT_MAX_DEPTH);
+    return generate();
   }
 
   public FileSystem generate(int maxDepth) {

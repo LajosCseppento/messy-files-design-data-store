@@ -1,3 +1,19 @@
-rootProject.name = "smart-files-design-data-store"
+buildscript {
+    repositories {
+        mavenLocal()
+        gradlePluginPortal()
+    }
 
-include("core", "arangodb", "orientdb")
+    dependencies {
+        classpath("dev.lajoscseppento.ruthless:ruthless-plugin:0.1.1-SNAPSHOT")
+    }
+}
+
+apply(plugin = "dev.lajoscseppento.ruthless")
+
+rootProject.name = "smart-files-design-data-store"
+include(
+        "core",
+        "arangodb",
+        "orientdb"
+)
