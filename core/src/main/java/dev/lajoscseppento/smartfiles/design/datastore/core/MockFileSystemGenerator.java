@@ -7,7 +7,6 @@ import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Random;
-import javax.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,14 +16,20 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class MockFileSystemGenerator {
 
-  @Autowired
-  private MockFileSystemGeneratorProperties properties;
+  @Autowired private MockFileSystemGeneratorProperties properties;
 
-  // These parameters generate max 2M elements under 10 seconds
-  private Random random;
+  private final Random random;
+
+  public MockFileSystemGenerator() {
+    this.random = new Random();
+  }
+
+  public MockFileSystemGenerator(long seed) {
+    this.random = new Random(seed);
+  }
 
   public FileSystem generate() {
-    return generate();
+    return generate(properties.getDefaultMaxDepth());
   }
 
   public FileSystem generate(int maxDepth) {
@@ -56,14 +61,16 @@ public class MockFileSystemGenerator {
       return;
     }
 
-    for (int i = 1; i <= nextInt(MIN_SUBDIRECTORIES, MAX_SUBDIRECTORIES); i++) {
+    for (int i = 1;
+        i <= nextInt(properties.getMinSubdirectories(), properties.getMaxSubdirectories());
+        i++) {
       Path subdirectory = directory.resolve(String.format("d%02d", i));
       Files.createDirectories(subdirectory);
 
       explode(subdirectory, depth + 1, maxDepth);
     }
 
-    for (int i = 1; i <= nextInt(MIN_FILES, MAX_FILES); i++) {
+    for (int i = 1; i <= nextInt(properties.getMinFiles(), properties.getMaxFiles()); i++) {
       Path file = directory.resolve(String.format("f%02d.txt", i));
       Files.createFile(file);
     }
