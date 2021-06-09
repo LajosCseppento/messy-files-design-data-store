@@ -4,6 +4,7 @@ import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.WebApplicationType;
@@ -19,15 +20,26 @@ public class MockFileSystemGeneratorDemo {
         .run(args);
   }
 
+  @Autowired private MockFileSystemGenerator generator;
+
   @Bean
   public CommandLineRunner commandLineRunner() {
     return args -> demo();
   }
 
+  @Bean
+  public MockFileSystemGenerator mockFileSystemGenerator() {
+    return new MockFileSystemGenerator(20201122150500L);
+  }
+
+  @Bean
+  public MockFileSystemGeneratorProperties mockFileSystemGeneratorProperties() {
+    return new MockFileSystemGeneratorProperties();
+  }
+
   private void demo() throws Exception {
     log.info("Generating mock file system...");
 
-    MockFileSystemGenerator generator = new MockFileSystemGenerator(20201122150500L);
     FileSystem fs = generator.generate(8);
     Path root = fs.getRootDirectories().iterator().next();
 

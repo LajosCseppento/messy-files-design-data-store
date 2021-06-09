@@ -8,17 +8,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Random;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /** Mock file system generator. Rudimentary, uses jimfs, Unix-style. */
+@Component
 @Slf4j
 public class MockFileSystemGenerator {
 
-  // These parameters generate max 2M elements under 10 seconds
-  private static final int MIN_SUBDIRECTORIES = 4;
-  private static final int MAX_SUBDIRECTORIES = 10;
-  private static final int MIN_FILES = 0;
-  private static final int MAX_FILES = 8;
-  private static final int DEFAULT_MAX_DEPTH = 6;
+  @Autowired private MockFileSystemGeneratorProperties properties;
 
   private final Random random;
 
@@ -31,7 +29,7 @@ public class MockFileSystemGenerator {
   }
 
   public FileSystem generate() {
-    return generate(DEFAULT_MAX_DEPTH);
+    return generate(properties.getDefaultMaxDepth());
   }
 
   public FileSystem generate(int maxDepth) {
@@ -63,14 +61,16 @@ public class MockFileSystemGenerator {
       return;
     }
 
-    for (int i = 1; i <= nextInt(MIN_SUBDIRECTORIES, MAX_SUBDIRECTORIES); i++) {
+    for (int i = 1;
+        i <= nextInt(properties.getMinSubdirectories(), properties.getMaxSubdirectories());
+        i++) {
       Path subdirectory = directory.resolve(String.format("d%02d", i));
       Files.createDirectories(subdirectory);
 
       explode(subdirectory, depth + 1, maxDepth);
     }
 
-    for (int i = 1; i <= nextInt(MIN_FILES, MAX_FILES); i++) {
+    for (int i = 1; i <= nextInt(properties.getMinFiles(), properties.getMaxFiles()); i++) {
       Path file = directory.resolve(String.format("f%02d.txt", i));
       Files.createFile(file);
     }

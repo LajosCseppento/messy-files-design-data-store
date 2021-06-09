@@ -1,6 +1,8 @@
 plugins {
-    id("dev.lajoscseppento.smartfiles.design.datastore.java-application-conventions")
+    id("dev.lajoscseppento.ruthless.spring-boot-application")
 }
+
+ruthless.lombok()
 
 dependencies {
     implementation(project(":core"))
