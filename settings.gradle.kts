@@ -1,11 +1,10 @@
 buildscript {
     repositories {
-        mavenLocal()
         gradlePluginPortal()
     }
 
     dependencies {
-        classpath("dev.lajoscseppento.ruthless:ruthless-plugin:0.1.1-SNAPSHOT")
+        classpath("dev.lajoscseppento.ruthless:ruthless-plugin:0.2.0")
     }
 }
 

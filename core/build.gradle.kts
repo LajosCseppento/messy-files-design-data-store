@@ -5,6 +5,6 @@ plugins {
 ruthless.lombok()
 
 dependencies {
-    api("org.springframework.boot:spring-boot-starter:2.4.0")
+    api("org.springframework.boot:spring-boot-starter")
     implementation("com.google.jimfs:jimfs:1.1")
 }
