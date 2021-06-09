@@ -15,10 +15,9 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class MockFileSystemGenerator {
+  private final Random random;
 
   @Autowired private MockFileSystemGeneratorProperties properties;
-
-  private final Random random;
 
   public MockFileSystemGenerator() {
     this.random = new Random();

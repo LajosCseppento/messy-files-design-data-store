@@ -19,7 +19,6 @@ import org.springframework.context.support.GenericApplicationContext;
     webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @Import(MockFileSystemGeneratorTest.TestConfiguration.class)
 public class MockFileSystemGeneratorTest {
-
   @Autowired private GenericApplicationContext context;
 
   @Test
