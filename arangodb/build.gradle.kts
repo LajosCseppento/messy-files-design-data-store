@@ -9,5 +9,5 @@ dependencies {
 }
 
 application {
-    mainClass.set("dev.lajoscseppento.smartfiles.design.datastore.arangodb.ArangoDbApp")
+    mainClass.set("dev.lajoscseppento.messyfiles.design.datastore.arangodb.ArangoDbApp")
 }

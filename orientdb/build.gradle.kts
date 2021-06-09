@@ -9,5 +9,5 @@ dependencies {
 }
 
 application {
-    mainClass.set("dev.lajoscseppento.smartfiles.design.datastore.orientdb.OrientDbApp")
+    mainClass.set("dev.lajoscseppento.messyfiles.design.datastore.orientdb.OrientDbApp")
 }

@@ -10,7 +10,7 @@ buildscript {
 
 apply(plugin = "dev.lajoscseppento.ruthless")
 
-rootProject.name = "smart-files-design-data-store"
+rootProject.name = "messy-files-design-data-store"
 include(
         "core",
         "arangodb",
