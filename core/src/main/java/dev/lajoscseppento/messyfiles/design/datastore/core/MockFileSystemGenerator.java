@@ -76,10 +76,7 @@ public class MockFileSystemGenerator {
   }
 
   private int nextInt(int min, int max) {
-    if (min > max) {
-      String msg = String.format("min=%d must not be greater than max=%d", min, max);
-      throw new IllegalArgumentException(msg);
-    }
+    CoreUtils.requireMinMax("min", min, "max", max);
     return min + random.nextInt(max - min + 1);
   }
 }

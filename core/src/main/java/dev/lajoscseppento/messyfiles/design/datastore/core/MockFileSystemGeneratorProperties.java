@@ -13,6 +13,8 @@ public class MockFileSystemGeneratorProperties {
   private int maxFiles = 8;
 
   public void validate() {
-    // TODO Validate
+    CoreUtils.requireMinMax(
+        "minSubdirectories", minSubdirectories, "maxSubdirectories", maxSubdirectories);
+    CoreUtils.requireMinMax("minFiles", minFiles, "maxFiles", maxFiles);
   }
 }
