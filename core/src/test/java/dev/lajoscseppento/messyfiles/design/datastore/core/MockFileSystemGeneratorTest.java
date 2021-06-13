@@ -18,7 +18,7 @@ import org.springframework.context.support.GenericApplicationContext;
     classes = {MockFileSystemGenerator.class, MockFileSystemGeneratorProperties.class},
     webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @Import(MockFileSystemGeneratorTest.TestConfiguration.class)
-public class MockFileSystemGeneratorTest {
+class MockFileSystemGeneratorTest {
   @Autowired private GenericApplicationContext context;
 
   @Test
@@ -49,7 +49,7 @@ public class MockFileSystemGeneratorTest {
         .collect(Collectors.toSet());
   }
 
-  public static class TestConfiguration {
+  static class TestConfiguration {
     private static long SEED = 20201122151000L;
 
     @Bean("mockFileSystemGenerator1")
