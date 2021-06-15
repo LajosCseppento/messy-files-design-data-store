@@ -4,16 +4,17 @@ import com.arangodb.ArangoCollection;
 import com.arangodb.ArangoDatabase;
 import com.arangodb.entity.BaseDocument;
 import com.arangodb.entity.CollectionEntity;
+import com.arangodb.model.CollectionsReadOptions;
 import dev.lajoscseppento.messyfiles.design.datastore.arangodb.database.ArangoDbConnection;
 import dev.lajoscseppento.messyfiles.design.datastore.core.MockFileSystemGenerator;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Collection;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import java.nio.file.*;
-import java.nio.file.attribute.BasicFileAttributes;
 
 @SpringBootApplication
 @Slf4j
@@ -39,13 +40,11 @@ public class ArangoDbApp implements CommandLineRunner {
   }
 
   private void listDatabase() {
-    for (CollectionEntity collection : database.getCollections()) {
-      if (Boolean.FALSE.equals(collection.getIsSystem())) {
-        log.info(
-            "Found collection {}, size: {}",
-            collection.getName(),
-            database.collection(collection.getName()).count().getCount());
-      }
+    for (CollectionEntity collection : getNonSystemCollections()) {
+      log.info(
+          "Found collection {}, size: {}",
+          collection.getName(),
+          database.collection(collection.getName()).count().getCount());
     }
   }
 
@@ -79,11 +78,15 @@ public class ArangoDbApp implements CommandLineRunner {
   }
 
   private void cleanDatabase() {
-    for (CollectionEntity collection : database.getCollections()) {
-      if (Boolean.FALSE.equals(collection.getIsSystem())) {
-        log.info("Deleting collection {}", collection.getName());
-        database.collection(collection.getName()).drop();
-      }
+    for (CollectionEntity collection : getNonSystemCollections()) {
+      log.info("Deleting collection {}", collection.getName());
+      database.collection(collection.getName()).drop();
     }
+  }
+
+  private Collection<CollectionEntity> getNonSystemCollections() {
+    CollectionsReadOptions options = new CollectionsReadOptions();
+    options.excludeSystem(true);
+    return database.getCollections(options);
   }
 }
