@@ -7,15 +7,14 @@ import com.arangodb.entity.CollectionEntity;
 import com.arangodb.model.CollectionsReadOptions;
 import dev.lajoscseppento.messyfiles.design.datastore.arangodb.database.ArangoDbConnection;
 import dev.lajoscseppento.messyfiles.design.datastore.core.MockFileSystemGenerator;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Collection;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import java.nio.file.*;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.util.Collection;
 
 @SpringBootApplication
 @Slf4j
