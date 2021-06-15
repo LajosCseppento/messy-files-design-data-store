@@ -1,0 +1,9 @@
+messy-files.design:
+    arango-db:
+      host: 127.0.0.1
+      port: 8529
+      username: messy-files
+      password: changeit
+      database: messy-files
+    mock-file-system-generator:
+      maxSubdirectories: 6
