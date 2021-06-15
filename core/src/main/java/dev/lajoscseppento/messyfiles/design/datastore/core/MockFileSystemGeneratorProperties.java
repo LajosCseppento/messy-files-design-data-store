@@ -2,8 +2,10 @@ package dev.lajoscseppento.messyfiles.design.datastore.core;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 
-@ConfigurationProperties("messy-files.design.MockFileSystemGenerator")
+@Configuration
+@ConfigurationProperties("messy-files.design.mock-file-system-generator")
 @Data
 public class MockFileSystemGeneratorProperties {
   private int defaultMaxDepth = 6;
