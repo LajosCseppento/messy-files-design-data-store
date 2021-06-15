@@ -7,14 +7,15 @@ import com.arangodb.entity.CollectionEntity;
 import com.arangodb.model.CollectionsReadOptions;
 import dev.lajoscseppento.messyfiles.design.datastore.arangodb.database.ArangoDbConnection;
 import dev.lajoscseppento.messyfiles.design.datastore.core.MockFileSystemGenerator;
-import java.nio.file.*;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.util.Collection;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Collection;
 
 @SpringBootApplication
 @Slf4j
@@ -61,13 +62,33 @@ public class ArangoDbApp implements CommandLineRunner {
       Files.walkFileTree(
           rootDirectory,
           new SimpleFileVisitor<>() {
+            private BaseDocument parent;
+
+            @Override
+            public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
+              BaseDocument document = new BaseDocument();
+
+              document.addAttribute("path", dir.toString());
+              document.addAttribute(
+                  "parent", dir.getParent() == null ? null : dir.getParent().toString());
+              document.addAttribute("name", dir.getFileName() == null ? null : dir.getFileName().toString());
+              document.addAttribute("type", "directory");
+
+              collection.insertDocument(document);
+
+              parent = document;
+
+              return FileVisitResult.CONTINUE;
+            }
+
             @Override
             public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
               BaseDocument document = new BaseDocument();
 
               document.addAttribute("path", file.toString());
-              document.addAttribute("directory", file.getParent().toString());
+              document.addAttribute("parent", file.getParent().toString());
               document.addAttribute("name", file.getFileName().toString());
+              document.addAttribute("type", "file");
 
               collection.insertDocument(document);
 
