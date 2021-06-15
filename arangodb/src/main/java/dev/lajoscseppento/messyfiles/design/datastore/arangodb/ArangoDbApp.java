@@ -71,8 +71,11 @@ public class ArangoDbApp implements CommandLineRunner {
               document.addAttribute("path", dir.toString());
               document.addAttribute(
                   "parent", dir.getParent() == null ? null : dir.getParent().toString());
-              document.addAttribute("name", dir.getFileName() == null ? null : dir.getFileName().toString());
+              document.addAttribute(
+                  "name", dir.getFileName() == null ? null : dir.getFileName().toString());
               document.addAttribute("type", "directory");
+
+              document.addAttribute("parent.key", parent == null ? null : parent.getKey());
 
               collection.insertDocument(document);
 
@@ -89,6 +92,8 @@ public class ArangoDbApp implements CommandLineRunner {
               document.addAttribute("parent", file.getParent().toString());
               document.addAttribute("name", file.getFileName().toString());
               document.addAttribute("type", "file");
+
+              document.addAttribute("parent.key", parent.getKey());
 
               collection.insertDocument(document);
 
