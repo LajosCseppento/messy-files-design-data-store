@@ -2,11 +2,10 @@ package dev.lajoscseppento.messyfiles.design.datastore.arangodb.model;
 
 import com.arangodb.entity.DocumentField;
 import com.arangodb.entity.DocumentField.Type;
-import lombok.Data;
-
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
+import lombok.Data;
 
 @Data
 public class FileSystemEntry {

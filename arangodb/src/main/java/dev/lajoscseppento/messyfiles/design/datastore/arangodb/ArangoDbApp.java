@@ -7,22 +7,19 @@ import com.arangodb.entity.CollectionEntity;
 import com.arangodb.entity.EdgeDefinition;
 import com.arangodb.entity.GraphEntity;
 import com.arangodb.model.CollectionsReadOptions;
+import com.arangodb.model.PersistentIndexOptions;
 import dev.lajoscseppento.messyfiles.design.datastore.arangodb.database.ArangoDbConnection;
 import dev.lajoscseppento.messyfiles.design.datastore.arangodb.model.FileSystemEntry;
 import dev.lajoscseppento.messyfiles.design.datastore.core.MockFileSystemGenerator;
+import java.io.IOException;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import java.io.IOException;
-import java.nio.file.*;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.util.ArrayDeque;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Deque;
 
 @SpringBootApplication
 @Slf4j
@@ -74,6 +71,10 @@ public class ArangoDbApp implements CommandLineRunner {
             .collection(EDGE_COLLECTION_NAME)
             .from(VERTEX_COLLECTION_NAME)
             .to(VERTEX_COLLECTION_NAME));
+
+    database
+        .collection(VERTEX_COLLECTION_NAME)
+        .ensurePersistentIndex(Arrays.asList("path"), new PersistentIndexOptions().unique(true));
 
     log.info("Populating graph...");
 
