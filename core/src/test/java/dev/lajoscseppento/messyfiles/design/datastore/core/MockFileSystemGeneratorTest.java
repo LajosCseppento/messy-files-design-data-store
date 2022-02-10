@@ -50,16 +50,18 @@ class MockFileSystemGeneratorTest {
   }
 
   static class TestConfiguration {
-    private static long SEED = 20201122151000L;
+    private static final long SEED = 20201122151000L;
 
     @Bean("mockFileSystemGenerator1")
-    public MockFileSystemGenerator mockFileSystemGenerator1() {
-      return new MockFileSystemGenerator(SEED);
+    public MockFileSystemGenerator mockFileSystemGenerator1(
+        MockFileSystemGeneratorProperties properties) {
+      return new MockFileSystemGenerator(properties, SEED);
     }
 
     @Bean("mockFileSystemGenerator2")
-    public MockFileSystemGenerator mockFileSystemGenerator2() {
-      return new MockFileSystemGenerator(SEED);
+    public MockFileSystemGenerator mockFileSystemGenerator2(
+        MockFileSystemGeneratorProperties properties) {
+      return new MockFileSystemGenerator(properties, SEED);
     }
   }
 }

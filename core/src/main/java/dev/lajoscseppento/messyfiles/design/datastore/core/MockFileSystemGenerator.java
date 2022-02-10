@@ -15,16 +15,18 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class MockFileSystemGenerator {
+  private final MockFileSystemGeneratorProperties properties;
   private final Random random;
 
-  @Autowired private MockFileSystemGeneratorProperties properties;
-
-  public MockFileSystemGenerator() {
+  @Autowired
+  public MockFileSystemGenerator(MockFileSystemGeneratorProperties properties) {
+    this.properties = properties;
     this.random = new Random();
   }
 
-  public MockFileSystemGenerator(long seed) {
+  public MockFileSystemGenerator(MockFileSystemGeneratorProperties properties, long seed) {
     this.random = new Random(seed);
+    this.properties = properties;
   }
 
   public FileSystem generate() {
@@ -47,7 +49,7 @@ public class MockFileSystemGenerator {
 
       explode(root, 1, maxDepth);
 
-      log.info("Generated mock file system with maxDepth={} ...", maxDepth);
+      log.info("Generated mock file system with maxDepth={}", maxDepth);
 
       return fs;
     } catch (Exception ex) {
