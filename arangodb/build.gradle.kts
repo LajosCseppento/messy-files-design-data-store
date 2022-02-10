@@ -6,8 +6,8 @@ ruthless.lombok()
 
 dependencies {
     implementation(project(":core"))
-    implementation("com.arangodb:arangodb-java-driver:6.12.1")
-    implementation("com.arangodb:jackson-dataformat-velocypack:2.0.0")
+    implementation("com.arangodb:arangodb-java-driver:6.16.0")
+    implementation("com.arangodb:jackson-dataformat-velocypack:3.0.0")
 }
 
 application {
