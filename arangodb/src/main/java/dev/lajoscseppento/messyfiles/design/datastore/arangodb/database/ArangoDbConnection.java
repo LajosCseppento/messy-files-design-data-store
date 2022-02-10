@@ -2,19 +2,20 @@ package dev.lajoscseppento.messyfiles.design.datastore.arangodb.database;
 
 import com.arangodb.ArangoDB;
 import com.arangodb.ArangoDatabase;
-import com.arangodb.mapping.ArangoJack;
+import com.arangodb.DbName;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+@RequiredArgsConstructor
 @Service
 @Slf4j
 public class ArangoDbConnection {
 
-  @Autowired private ArangoDbProperties properties;
+  private final ArangoDbProperties properties;
 
   private ArangoDB arangoDb;
   @Getter private ArangoDatabase database;
@@ -26,16 +27,16 @@ public class ArangoDbConnection {
         properties.getHost(),
         properties.getPort(),
         properties.getUsername());
+
     arangoDb =
-        new ArangoDB.Builder()
-            .host(properties.getHost(), properties.getPort())
-            .user(properties.getUsername())
-            .password(properties.getPassword())
-            .serializer(new ArangoJack())
-            .build();
+        ArangoDbAccessPointFactory.create(
+            properties.getHost(),
+            properties.getPort(),
+            properties.getUsername(),
+            properties.getPassword());
 
     log.info("Selecting database {} ...", properties.getDatabase());
-    database = arangoDb.db(properties.getDatabase());
+    database = arangoDb.db(DbName.of(properties.getDatabase()));
   }
 
   @PreDestroy

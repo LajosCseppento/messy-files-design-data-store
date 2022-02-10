@@ -15,12 +15,13 @@ import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+@RequiredArgsConstructor
 @SpringBootApplication
 @Slf4j
 public class ArangoDbApp implements CommandLineRunner {
@@ -28,9 +29,9 @@ public class ArangoDbApp implements CommandLineRunner {
   public static final String GRAPH_NAME = "file-system-graph";
   public static final String EDGE_COLLECTION_NAME = "file-system-relations";
 
-  @Autowired private ArangoDbConnection arangoDbConnection;
+  private final ArangoDbConnection arangoDbConnection;
 
-  @Autowired private MockFileSystemGenerator mockFileSystemGenerator;
+  private final MockFileSystemGenerator mockFileSystemGenerator;
 
   private ArangoDatabase database;
 
@@ -48,6 +49,8 @@ public class ArangoDbApp implements CommandLineRunner {
   }
 
   private void listDatabase() {
+    log.info("Listing database...");
+
     for (CollectionEntity collection : getNonSystemCollections()) {
       log.info(
           "Found collection {}, size: {}",
@@ -60,7 +63,7 @@ public class ArangoDbApp implements CommandLineRunner {
     }
   }
 
-  private void generateDatabase() throws Exception {
+  private void generateDatabase() throws IOException {
     log.info("Creating graph...");
 
     ArangoGraph graph = database.graph(GRAPH_NAME);
@@ -74,12 +77,13 @@ public class ArangoDbApp implements CommandLineRunner {
 
     database
         .collection(VERTEX_COLLECTION_NAME)
-        .ensurePersistentIndex(Arrays.asList("path"), new PersistentIndexOptions().unique(true));
+        .ensurePersistentIndex(List.of("path"), new PersistentIndexOptions().unique(true));
 
     log.info("Populating graph...");
 
     FileSystem fileSystem = mockFileSystemGenerator.generate();
 
+    log.info("Walking file system...");
     for (Path rootDirectory : fileSystem.getRootDirectories()) {
       Files.walkFileTree(
           rootDirectory,
@@ -102,6 +106,7 @@ public class ArangoDbApp implements CommandLineRunner {
             @Override
             public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
               FileSystemEntry entry = createEntry(file, attrs);
+              assert parents.peek() != null;
               createEdge(parents.peek().getId(), entry.getId());
               return FileVisitResult.CONTINUE;
             }
