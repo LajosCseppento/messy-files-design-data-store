@@ -1,10 +1,10 @@
 package dev.lajoscseppento.messyfiles.design.datastore.arangodb.scripts;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import com.arangodb.ArangoDB;
 import dev.lajoscseppento.messyfiles.design.datastore.arangodb.database.ArangoDbAccessPointFactory;
 import dev.lajoscseppento.messyfiles.design.datastore.arangodb.database.ArangoDbProperties;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
